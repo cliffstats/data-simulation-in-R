@@ -1,0 +1,419 @@
+---
+title: "Data Simulation"
+author: "Cliff"
+date: "November 24, 2017"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+```{r}
+#set working directory
+setwd("C:/Users/cliff/Desktop/R/")
+
+#Check and clear memory
+ls()
+rm(list=ls())
+
+
+#read and view original data 
+library(readr)
+prostitution_df<-read_csv("cleaned_data.csv")
+View(prostitution_df)
+names(prostitution_df)<-c("Respondents_ID","Age","Gender","Orphan",
+                      "Which_Parent","Time","School","Reason","Intent_to_stop","Diseases"
+                      ,"Protection","Sex_Education")
+#attach(prostitution_df)
+
+prostitution_df$Respondents_ID<-c(170256:170380)
+prostitution_df$Age<-round(rnorm(125,14,3))
+prostitution_df$Gender<-rep(c("F","M","F","F","M"),25)
+prostitution_df$Orphan<-rep(c("Yes","No","Yes","No","Yes"),25)
+prostitution_df$Which_Parent<-rep(c("N/A","Both","N/A","Mother","N/A",
+                                     "N/A","Father","N/A","Mother","N/A",
+                                     "N/A","Father","N/A","Father","N/A",
+                                     "N/A","Mother","N/A","Father","N/A",
+                                     "N/A","Both","N/A","Father","N/A"),5)
+#Time Variable
+prostitution_df$Time<-rep(c("1 year","Less than a Year","1 year","More than a year",
+                            "More than a year"),25)
+#School Variable
+prostitution_df$School<-rep(c("Primary","Primary","Secondary","N/A","Secondary"),25)
+
+#Reason variable
+prostitution_df$Reason<-rep(c("Fend for family", "Unemployment","Forced by relative", "Peer pressure","N/A"),25)
+
+#Intent_to_stop variable
+prostitution_df$Intent_to_stop<-rep(c("Yes", "No", "No", "Yes", "No"),25)
+
+#Intent_to_stop variable
+prostitution_df$Diseases<-rep(c("Yes", "No", "No", "Yes", "No"),25)
+
+#Intent_to_stop variable
+prostitution_df$Protection<-rep(c("No", "Yes", "No", "Yes", "No"),25)
+
+#Intent_to_stop variable
+prostitution_df$Sex_Education<-rep(c("Yes", "No", "Yes", "No", "No"),25)
+
+colnames(prostitution_df)
+
+attach(prostitution_df)
+
+#Export or transform data to csv file for reference and comparison
+write.csv(prostitution_df, file="prostitution_df.csv")
+str(prostitution_df)
+
+{
+  prostitution_df$Respondents_ID <- as.character(Respondents_ID)
+  fastfood_data1$Gender <- as.factor(Gender)
+  fastfood_data1$place <- as.factor(place)
+  fastfood_data1$instances <- as.factor(instances)
+  fastfood_data1$taste <- as.factor(taste)
+  fastfood_data1$price <- as.factor(price)
+  fastfood_data1$litter <- as.factor(litter)
+  fastfood_data1$fstreets <- as.factor(fstreets)
+  fastfood_data1$need <- as.factor(need)
+  fastfood_data1$gender <- as.factor(gender)
+  }
+  
+attach(fastfood_data1)
+#View(fastfood_data1)
+#str(fastfood_data1)
+table(fstreets)
+
+
+#write.table(fastfood_data1, file = "C:\\Users\\cliff\\Desktop\\\n Marys data analysis\\fastfood_data1.csv", col.names = NA, sep = ",", dec = ".", qmethod = "double")
+#write.csv(fastfood_data, file="C:\\Users\\cliff\\Desktop\\fastfood_data1.csv")
+write.csv(fastfood_data1, file="C:\\Users\\cliff\\Desktop\\R\\Marys data analysis\\fastfood_data1.csv")
+
+#load up ggplot2 package to use for visualization
+library(ggplot2)
+
+#creating bar charts or histogram
+ggplot(fastfood_data1, aes(x = age, fill = factor(size))) +
+  geom_bar(stat = "count")+
+  xlab("age") +
+  ylab("Total Count") +
+  labs(fill = "size")
+
+#create unique ids
+#length(unique(as.character(id)))
+#table(fastfood_data1$id)
+fastfood_data1$id<-c(1003001:1003120)
+#View(fastfood_data1)
+
+#lets edit the gender variable
+{
+  {
+fastfood_data1[62:79,2]<- "female"
+fastfood_data1[22:33,2]<- "female"
+fastfood_data1[39:41,2]<- "male"
+fastfood_data1[103:117,2]<- "female"
+  }
+
+fastfood_data1[82,1]<- 1003001
+fastfood_data1[113,1]<- 1003053
+fastfood_data1[91,1]<- 1003111
+fastfood_data1[47,1]<- 1003039
+fastfood_data1[108,1]<- 1003053
+fastfood_data1[99,1]<- 1003071
+fastfood_data1[7,1]<- 1003039
+}
+
+  table(fastfood_data1$gender)
+  attach(fastfood_data1)
+  length(unique(fastfood_data1$id))
+  table(gender)
+
+#recode the age variable
+table(age)
+
+{
+  fastfood_data1$age<-replace(fastfood_data1$age, age_1<-which(fastfood_data1$age %in% 1), "10-19")
+fastfood_data1$age<-replace(fastfood_data1$age, age_1<-which(fastfood_data1$age %in% 2), "20-29")
+fastfood_data1$age<-replace(fastfood_data1$age, age_1<-which(fastfood_data1$age %in% 3), "30-39")
+fastfood_data1$age<-replace(fastfood_data1$age, age_1<-which(fastfood_data1$age %in% 4), "40-49")
+rm(age_1)
+}
+
+
+attach(fastfood_data1)
+table(fastfood_data1$age)
+#str(fastfood_data1)
+
+#visualize 3way rltnshp of instances, age and gender
+#geom_histogram(stat = "count")
+#geom_histogram(binwidth = 0.5)+
+ggplot(fastfood_data1[1:90,], aes(x = age, fill = gender))+
+#geom_bar(stat = "count")+
+geom_bar(stat = "count")+
+facet_wrap(~instances)+
+ggtitle("instances")+
+xlab("age")+
+ylab("Total Count")+
+labs(fill = "gender")
+
+#two duplicate names found,lets get the duplicates and store them as vectors
+#dup.names<- as.character(fastfood_data1[which(duplicated(fastfood_data1$Name)), "Name"])
+
+
+#create a utility function to help with franchise extraction
+{
+  rm(franchise)
+table(place)
+fastfood_data1$place<-as.character(place)
+extractFranchise<-function(place){
+  
+   
+  if (length(grep("inn", place))>0) {
+    return("franchise")
+  } else if (length(grep("square", place))>0) {
+    return("franchise")
+  } else if (length(grep("steers", place))>0) {
+    return("franchise")
+  } else if (length(grep("others", place))>0) {
+    return("non-franchise")
+  } else {
+    return(" ")
+  }
+}
+
+franchise<- NULL  
+for(i in 1:nrow(fastfood_data1)) {
+  franchise<-c(franchise, extractFranchise(fastfood_data1[i, "place"]))
+}
+attach(fastfood_data1)
+table(franchise)
+}
+
+
+fastfood_data1$franchise <- as.factor(franchise)
+fastfood_data1$age <- as.factor(age)
+attach(fastfood_data1)
+table(fastfood_data1$franchise)
+
+{
+  fastfood_data1$price<-as.character(fastfood_data1$price) 
+fastfood_data1$price<-replace(fastfood_data1$price, B1<-which(fastfood_data1$price %in% "acceptable"), "medium")
+  attach(fastfood_data1)
+table(fastfood_data1$price)
+}
+
+fastfood_data1$place<-as.factor(fastfood_data1$place)
+fastfood_data1$price<-as.factor(fastfood_data1$price)
+
+str(fastfood_data1)
+
+#analysing price correlation with other variables
+#separate dataframe by levels of price
+library(stringr)
+rich1<-fastfood_data1[which(str_detect(fastfood_data1$price, "high")), ]
+table(rich1[,17])
+#View(fastfood_data1)
+mid1<-fastfood_data1[which(str_detect(fastfood_data1$price, "medium")),]
+mid1[1:5,]
+
+poor1<- fastfood_data1[which(fastfood_data1$price == "low"), ]
+poor1[1:5,]
+
+
+#since survived lable has values in train set only , use first 891 rows
+ggplot(fastfood_data1[1:103,], aes(x = price, fill = "age"))+
+geom_bar(stat = "count")+
+#geom_bar(binwidth = 0.5)+
+#geom_histogram(stat = "count")
+#geom_col(binwidth = 0.5)+
+facet_wrap(~gender)+
+ggtitle("gender")+
+xlab("price")+
+ylab("Total Count")+
+labs(fill="age")
+
+
+#since survived lable has values in train set only , use first 891 rows
+ggplot(fastfood_data1[1:103,], aes(x = gender, fill = franchise))+
+geom_bar(stat = "count")+
+#geom_bar(binwidth = 0.5)+
+#geom_histogram(stat = "count")
+#geom_col(binwidth = 0.5)+
+facet_wrap(~price)+
+ggtitle("price")+
+xlab("price")+
+ylab("Total Count")+
+labs(fill="franchise")
+
+#whats the distribution of females to males across fastfood_data1
+table(fastfood_data1$gender)
+
+ggplot(fastfood_data1[1:110,], aes(x = gender, fill = price))+
+#geom_bar(stat = "count")+
+geom_bar(stat = "count")+
+#geom_histogram(stat = "count")
+#geom_histogram(binwidth = 0.5)+
+facet_wrap(~age)+
+ggtitle("age")+
+xlab("Sex")+
+ylab("Total Count")+
+labs(fill = "price")
+
+
+summary(fastfood_data1$age)
+summary(fastfood_data1[1:91,"age"])
+
+
+summary(instances)
+{
+fastfood_data1$instances<-as.character(fastfood_data1$instances)
+  fastfood_data1$instances<-replace(fastfood_data1$instances, B2<-which
+                        (fastfood_data1$instances %in% "once a weel"), "once a week")
+  fastfood_data1$instances<-replace(fastfood_data1$instances, B3<-which
+                        (fastfood_data1$instances %in% "everday"), "everyday")
+  fastfood_data1$instances<-replace(fastfood_data1$instances, B3<-which
+                        (fastfood_data1$instances %in% "not very often"), "rarely")
+attach(fastfood_data1)
+table(fastfood_data1$instances)
+}
+
+#look at survival rates against gender, pclass and survival
+ggplot(fastfood_data1[1:91,], aes(x = gender, fill = instances))+
+geom_bar(stat = "count")+
+
+#geom_histogram(binwidth = 10)+
+facet_wrap(~gender + price)+
+xlab("gender")+
+ylab("Total Count")+
+labs(fill = "instances")
+
+fastfood_data1[,13]
+summary(fastfood_data1$taste)
+fastfood_data1$taste<-as.character(fastfood_data1$taste)
+{
+  {
+    fastfood_data1[62:67,13]<- c("poor")
+    fastfood_data1[22:30,13]<- "fair"
+    fastfood_data1[39:41,13]<- "good"
+    fastfood_data1[103:117,13]<- "fair"
+  }
+
+fastfood_data1[82,13]<- "good"
+fastfood_data1[113,13]<- "good"
+fastfood_data1[91,13]<- "good"
+fastfood_data1[47,13]<- "good"
+fastfood_data1[108,13]<- "good"
+fastfood_data1[99,13]<- "good"
+fastfood_data1[7,13]<- "good"
+}
+
+summary(fastfood_data1$taste)
+summary(as.factor(fastfood_data1$taste))
+attach(fastfood_data1)
+as.character(fastfood_data1[,13])
+fastfood_data1$taste<-as.character(fastfood_data1$taste)
+fastfood_data1[10:20,13]
+B5<-which(fastfood_data1[10:20,13] %in% "excellent")
+
+taste<-as.character(fastfood_data1$taste)
+#str_detect(taste, "excellent")
+
+str_which("excellent",taste)
+str_detect("excellent", taste[13:33])
+str_which("excellent", taste[13:33])
+c(12+str_which("excellent", taste[13:33]))
+
+{
+  #c(12+str_which("excellent", taste[13:33]))
+  fastfood_data1$taste<-as.character(fastfood_data1$taste)
+  B5<-c(12+str_which("excellent", taste[13:33]))
+B6<-c(62+str_which("excellent", taste[63:70]))
+B7<-c(93+str_which("excellent", taste[94:97]))
+  #which(d2<-fastfood_data1[,13] %in% c("excellent"))
+#B7<-which(d3<-fastfood_data1[1:117,13] %in% c("excellent"))
+fastfood_data1$taste<-c(replace(fastfood_data1$taste, B5, "good"))
+fastfood_data1$taste<-c(replace(fastfood_data1$taste, B6, "good"))
+fastfood_data1$taste<-c(replace(fastfood_data1$taste, B7, "good"))
+summary(as.factor(fastfood_data1$taste))
+}
+#remove unused objects
+rm()
+{
+  #c(12+str_which("excellent", taste[13:33]))
+  fastfood_data1$taste<-as.character(fastfood_data1$taste)
+  d1<-c(str_which("acceptable", taste[1:20]))
+  d2<-c(20+str_which("acceptable", taste[21:40]))
+d3<-c(40+str_which("acceptable", taste[41:70]))
+d4<-c(70+str_which("acceptable", taste[71:85]))
+d5<-c(85+str_which("acceptable", taste[86:105]))
+d6<-c(105+str_which("acceptable", taste[106:120]))
+
+
+fastfood_data1$taste<-c(replace(fastfood_data1$taste, c(d1,d3), "good"))
+fastfood_data1$taste<-c(replace(fastfood_data1$taste, c(d2,d5), "fair"))
+fastfood_data1$taste<-c(replace(fastfood_data1$taste, c(d4,d6), "poor"))
+summary(as.factor(fastfood_data1$taste))
+}
+fastfood_data1$taste<-as.factor(fastfood_data1$taste)
+
+
+#look at survival rates against gender, pclass and survival
+ggplot(fastfood_data1[1:91,], aes(x = gender, fill = instances))+
+geom_bar(stat = "count")+
+
+#geom_histogram(binwidth = 10)+
+facet_wrap(~gender + price)+
+xlab("gender")+
+ylab("Total Count")+
+labs(fill = "instances")
+
+#validate that master is a good proxy for male children 
+View(fastfood_data1)
+which(fastfood_data1$franchise == "franchise")
+franchise_only <- fastfood_data1[which(as.character
+                  (fastfood_data1$franchise) == "franchise"),]
+summary(franchise_only$age)
+
+#how to replicate data rowwise
+#create mega data
+{
+  FASTFOOD_DATA<-rbind(fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1[73:111,],
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1[43:89,],fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1[108:115,],fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1[73:111,],
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1[3:19,],fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1[10:45,],fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1[59:107,],
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1,fastfood_data1,
+                     fastfood_data1,fastfood_data1,fastfood_data1[30:90,])
+
+#optimal code for data replication
+fastfood_data2<-as.data.frame(lapply(FASTFOOD_DATA, rep, 11))
+}
+
+
+#Export or transform data to csv file for future use
+write.csv(fastfood_data2, file="C:\\Users\\cliff\\Desktop\\R\\Marys data analysis\\FASTFOODFINAL_ODATA.csv")
+
+```
+
+
+
+
+
+
+
